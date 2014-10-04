@@ -2,7 +2,6 @@
 <html ng-app="signalRApp">
 <head>
 	<title>Example Angular + SignalR</title>
-	<script type="text/javascript" src="bower_components\angular\angular.js"></script>
 </head>
 <body ng-controller="MessagesController">
 	<h1>Messages pushed by SignalR</h1>
@@ -13,13 +12,7 @@
 		</tr>
 	</table>
 
-	<script type="text/javascript">
-
-	var app = angular.module('signalRApp', []);
-
-	app.controller('MessagesController', function($scope) {
-		$scope.messages = [{ creationDate: "11:30", body: "Hello! this is a message"}, { creationDate: "11:32", body: "Hello! this is another message"} ]
-	}); 
-	</script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="scripts/angular-signalr.js"></script>
 </body>
 </html>
