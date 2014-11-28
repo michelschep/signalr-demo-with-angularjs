@@ -5,41 +5,35 @@ angular.module('signalRApp', [])
   
     this.initialize = function () {
         console.log('create connection');
-
-        //Getting the connection object
         var connection = $.hubConnection('http://localhost:8088');
         connection.logging = true;
 
         console.log('create hub proxy');
-        //Creating proxy
         this.proxy = connection.createHubProxy('breakingNewsHub');
   
-        //Publishing an event when server pushes a message
-        this.proxy.on('breakingNews', function (message) {
-            $rootScope.$broadcast("breakingNews", message);
+        this.proxy.on('sendBreakingNews', function (message) {
+            $rootScope.$broadcast("breakingNewsEvent", message);
         });
   
         console.log('start connection');
 
-        //Starting connection
         setTimeout(function () {
             console.log('start');
             
             connection.start().done(function () {
-                //Do interesting stuff
                 console.log('started');
             });
         }, 1000);
     };
 })
-.controller('MessagesController', function($scope, breakingNewsService) {
+.controller('MessagesController', function($scope, $sce, breakingNewsService) {
     breakingNewsService.initialize();
 
-    $scope.messages = [];
-
-     $scope.$on("breakingNews", function (event, message) {
-        $scope.messages.push(message);
-
+     var body = "";
+    
+     $scope.$on("breakingNewsEvent", function (event, message) {
+        body = body + message.Body;
+        $scope.message = $sce.trustAsHtml(body);
         $scope.$apply();
     });
 }); 

@@ -4,13 +4,9 @@
 	<title>Example Angular + SignalR</title>
 </head>
 <body ng-controller="MessagesController">
-	<h1>Messages pushed by SignalR</h1>
-	<table>
-		<tr ng-repeat="message in messages">
-			<td>{{message.CreationDate}}</td>
-			<td>{{message.Body}}</td>
-		</tr>
-	</table>
+	<h1>Example: Messages pushed by SignalR</h1>
+
+	<h2 ng-bind-html="message" compile-template></h2>
 
 	<script src="bower_components/angular/angular.js"></script>
 

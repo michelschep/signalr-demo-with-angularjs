@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
 using Owin;
@@ -15,13 +13,20 @@ namespace Ixmucane.BreakingNews
         {
             //var hubContext = GlobalHost.ConnectionManager.GetHubContext<BreakingNewsHub>();
 
-            using (var SignalR = WebApp.Start<SignalRStartup>("http://*:8088/"))
+            using (WebApp.Start<SignalRStartup>("http://*:8088/"))
             {
                 while (true)
                 {
-                    var message = Console.ReadLine();
-                    var breakingNews = new BreakingNews(message);
-                    BreakingNewsHub.HubContext.Clients.All.breakingNews(breakingNews);
+                    var info = Console.ReadKey();
+                    string c = (info.KeyChar == '\r') ? "<br>" : info.KeyChar.ToString();
+
+                    if (info.KeyChar == '\r')
+                        Console.WriteLine();
+
+                    //string c = info.KeyChar.ToString();
+                    var message = new BreakingNewsMessage(c);
+
+                    BreakingNewsHub.HubContext.Clients.All.sendBreakingNews(message);
                 }
 
                 Console.WriteLine("Press [enter] to quit...");
@@ -30,9 +35,9 @@ namespace Ixmucane.BreakingNews
         }
     }
 
-    public class BreakingNews
+    public class BreakingNewsMessage
     {
-        public BreakingNews(string message)
+        public BreakingNewsMessage(string message)
         {
             Body = message;
             CreationDate = DateTime.Now.ToString();
