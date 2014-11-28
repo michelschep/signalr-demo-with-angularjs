@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
-using Owin;
 
-namespace Ixmucane.BreakingNews
+namespace DemoSignalR
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            //var hubContext = GlobalHost.ConnectionManager.GetHubContext<BreakingNewsHub>();
+            Console.WriteLine("Starting SignalR push service...");
 
             using (WebApp.Start<SignalRStartup>("http://*:8088/"))
             {
+                Console.WriteLine("SignalR push service started!");
+
                 while (true)
                 {
                     var info = Console.ReadKey();
@@ -23,73 +21,11 @@ namespace Ixmucane.BreakingNews
                     if (info.KeyChar == '\r')
                         Console.WriteLine();
 
-                    //string c = info.KeyChar.ToString();
-                    var message = new BreakingNewsMessage(c);
+                    var message = new DemoMessage(c);
 
-                    BreakingNewsHub.HubContext.Clients.All.sendBreakingNews(message);
+                    DemoHub.HubContext.Clients.All.sendDemoHubMessage(message);
                 }
-
-                Console.WriteLine("Press [enter] to quit...");
-                Console.ReadLine();
             }
         }
-    }
-
-    public class BreakingNewsMessage
-    {
-        public BreakingNewsMessage(string message)
-        {
-            Body = message;
-            CreationDate = DateTime.Now.ToString();
-        }
-
-        public string CreationDate { get; set; }
-
-        public string Body { get; set; }
-    }
-    public class SignalRStartup
-    {
-        public static IAppBuilder App = null;
-
-        public void Configuration(IAppBuilder app)
-        {
-            app.Map("/signalr", map =>
-            {
-                map.UseCors(CorsOptions.AllowAll);
-
-                var hubConfiguration = new HubConfiguration
-                {
-                    EnableDetailedErrors = true,
-                    EnableJSONP = true
-                };
-
-                map.RunSignalR(hubConfiguration);
-            });
-        }
-    }
-
-    public class BreakingNewsHub : Hub
-    {
-        public BreakingNewsHub()
-        {
-        }
-
-        public override Task OnConnected()
-        {
-            Console.WriteLine("Connection!");
-            return base.OnConnected();
-        }
-
-        public static IHubContext HubContext
-        {
-            get
-            {
-                if (_context == null)
-                    _context = GlobalHost.ConnectionManager.GetHubContext<BreakingNewsHub>();
-
-                return _context;
-            }
-        }
-        static IHubContext _context = null;
     }
 }

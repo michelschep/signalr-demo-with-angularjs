@@ -7,8 +7,8 @@
     <ProjectGuid>{D3F7BF3D-8B62-455A-9D3C-3641D0D1B45E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ixmucane.BreakingNews</RootNamespace>
-    <AssemblyName>Ixmucane.BreakingNews</AssemblyName>
+    <RootNamespace>DemoSignalR</RootNamespace>
+    <AssemblyName>DemoSignalR</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -76,11 +76,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientMessage.cs" />
+    <Compile Include="DemoHub.cs" />
+    <Compile Include="DemoMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalRStartup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

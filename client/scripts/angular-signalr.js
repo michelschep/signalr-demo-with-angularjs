@@ -1,39 +1,95 @@
 angular.module('signalRApp', [])
 .value('$', $)
-.service('breakingNewsService', function ($, $rootScope) {
+.service('demoHubService', function ($, $rootScope) {
     var proxy = null;
-  
+    var connection;
+
     this.initialize = function () {
-        console.log('create connection');
-        var connection = $.hubConnection('http://localhost:8088');
+        connection = $.hubConnection('http://localhost:8088');
         connection.logging = true;
 
-        console.log('create hub proxy');
-        this.proxy = connection.createHubProxy('breakingNewsHub');
-  
-        this.proxy.on('sendBreakingNews', function (message) {
-            $rootScope.$broadcast("breakingNewsEvent", message);
+        this.proxy = connection.createHubProxy('demoHub');
+        
+        // messages from the signalR hub
+        this.proxy.on('sendDemoHubMessage', function (message) {
+            $rootScope.$broadcast("MessageEvent", message);
         });
-  
-        console.log('start connection');
 
-        setTimeout(function () {
-            console.log('start');
-            
-            connection.start().done(function () {
-                console.log('started');
-            });
-        }, 1000);
+        this.proxy.on('sendMessageFromClient', function (message) {
+            $rootScope.$broadcast("MessageFromOtherClientEvent", message);
+        });
+
+// { transport: ['webSockets', 'serverSentEvents', 'longPolling', 'foreverFrame'] }
+        connection.start(
+            // { transport: ['serverSentEvents', 'longPolling'] }
+            ).done(function () {
+            $rootScope.$broadcast("SignalREvent", "started");
+        });
+
+        connection.reconnected(function() {
+           $rootScope.$broadcast("SignalREvent", "reconnected"); 
+        });
+
+        connection.disconnected(function() {
+           $rootScope.$broadcast("SignalREvent", "disconnected"); 
+        });
+
+        connection.reconnecting(function() {
+           $rootScope.$broadcast("SignalREvent", "reconnecting"); 
+        });
+
+        connection.error(function(error) {
+           $rootScope.$broadcast("SignalREvent", "error: " + error); 
+        });
+    };
+
+    this.sendMessage = function(message) {
+        this.proxy.invoke('sendMessage', message);
+    };
+
+    this.stopConnection = function(message) {
+        connection.stop();
+        $rootScope.$broadcast("SignalREvent", "Connection stopped"); 
+    };
+
+    this.connectionId = function() {
+        return this.proxy.connection.id;
     };
 })
-.controller('MessagesController', function($scope, $sce, breakingNewsService) {
-    breakingNewsService.initialize();
-
+.controller('MessagesController', function($scope, $sce, demoHubService) {
      var body = "";
-    
-     $scope.$on("breakingNewsEvent", function (event, message) {
+     $scope.status = "no connection";
+     $scope.messageFromOtherClient = "Still no message from other client :-(";
+
+     $scope.$on("MessageEvent", function (event, message) {
         body = body + message.Body;
         $scope.message = $sce.trustAsHtml(body);
+
         $scope.$apply();
     });
+
+     $scope.$on("SignalREvent", function (event, message) {
+        $scope.status = message;
+        $scope.connectionId = demoHubService.connectionId();
+
+        $scope.$apply();
+    });
+
+      $scope.$on("MessageFromOtherClientEvent", function (event, message) {
+        $scope.messageFromOtherClient = message;
+
+        $scope.$apply();
+    });
+
+     $scope.makeConnection = function() {
+        demoHubService.initialize();  
+     }
+
+     $scope.stopConnection = function() {
+        demoHubService.stopConnection();  
+     }
+
+     $scope.sendMessage = function(message) {
+        demoHubService.sendMessage(message);  
+     };
 }); 
