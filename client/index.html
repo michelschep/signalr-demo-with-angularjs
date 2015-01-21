@@ -2,38 +2,62 @@
 <html ng-app="signalRApp">
 <head>
 	<title>Example Angular + SignalR</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 </head>
 <body ng-controller="MessagesController">
-	<h1>Example: Messages pushed by SignalR</h1>
+	<div class="container">
+		<h1>GoldCard</h1>
 
-	<!-- <p>Client side <a href="https://github.com/SignalR/SignalR/wiki/SignalR-JS-Client">signalr-js-client</a></p> -->
+		<!-- <p>Client side <a href="https://github.com/SignalR/SignalR/wiki/SignalR-JS-Client">signalr-js-client</a></p> -->
+		<hr/>
 
-	<button ng-click="makeConnection()">Make Connection</button>
-	<button ng-click="stopConnection()">Stop Connection</button>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#sectionA" data-toggle="tab">Home</a></li>
+			<li><a href="#sectionB" data-toggle="tab">List</a></li>
+			<li><a href="#sectionC" data-toggle="tab">Query</a></li>
+		</ul>
 
-	<p>Status Connection: <b>{{status}}</b></p>
-	<p>Connection id: <b>{{connectionId}}</b></p>
-	
-	<hr/>
-	
-	<h1>Message from server</h1>
-	<p ng-bind-html="message" compile-template></p>
-	<hr/>
+		<div class="tab-content">
+			<div id="sectionA" class="tab-pane fade in active">
+				<button ng-click="makeConnection()">Make Connection</button>
+				<button ng-click="stopConnection()">Stop Connection</button>
 
-	<h1>Send message to other clients</h1>
-	<input ng-model="newMessage" ng-change="sendMessage(newMessage)" />
-	
-	<h1>Message from other client</h1>
-	<p>Client: <b>{{messageFromOtherClient.Name}}</b>
-	<p>Message: <b>{{messageFromOtherClient.Message}}</b>
+				<p>Status Connection: <b>{{status}}</b></p>
+				<p>Connection id: <b>{{connectionId}}</b></p>
+				
+				<hr/>
+				
+				<h1>Message from server</h1>
+				<p ng-bind-html="message" compile-template></p>
+				<hr/>
 
-	<hr/>
+				<h1>Send message to other clients</h1>
+				<input ng-model="newMessage" ng-change="sendMessage(newMessage)" />
+				
+				<h1>Message from other client</h1>
+				<p>Client: <b>{{messageFromOtherClient.Name}}</b>
+				<p>Message: <b>{{messageFromOtherClient.Message}}</b>
+			</div>
+			<div id="sectionB" class="tab-pane fade">
+				<h3>Section B</h3>
+				LIST
+			</div>
+			<div id="sectionC" class="tab-pane fade">
+				<h3>Section C</h3>
+				QUERY
+			</div>
+		</div>
 
-	<a href="http://localhost:8088/signalr/hubs">js meta data for hubs</a>
-	
+		<div>some status info (background requests)</div>
+
+		<a href="http://localhost:8088/signalr/hubs">js meta data for hubs</a>
+	</div>
 	<script src="bower_components/angular/angular.js"></script>
+	
 
-	<script src="bower_components/jquery/dist/jquery.js"></script>
+	
 	<script src="bower_components/signalr/jquery.signalR.js"></script>
 	<script src="scripts/angular-signalr.js"></script>
 	<script src="http://localhost:8088/signalr/hubs"></script>
