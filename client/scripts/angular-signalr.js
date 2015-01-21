@@ -43,8 +43,8 @@ angular.module('signalRApp', [])
         });
     };
 
-    this.sendMessage = function(message) {
-        this.proxy.invoke('sendMessage', message);
+    this.handle = function(message) {
+        this.proxy.invoke('handle', message);
     };
 
     this.stopConnection = function(message) {
@@ -71,7 +71,6 @@ angular.module('signalRApp', [])
         $scope.responses.push(message);
 
         angular.forEach($scope.requests, function(request , key) {
-
             if (request.serverRequest.messageId === message.messageId)
                 request.status = "processed";
         })
