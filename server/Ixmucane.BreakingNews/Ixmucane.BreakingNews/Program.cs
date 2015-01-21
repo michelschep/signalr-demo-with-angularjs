@@ -13,17 +13,22 @@ namespace DemoSignalR
             {
                 Console.WriteLine("SignalR push service started!");
 
-                while (true)
+                string line;
+                while ((line = Console.ReadLine()) != null)
                 {
-                    var info = Console.ReadKey();
-                    string c = (info.KeyChar == '\r') ? "<br>" : info.KeyChar.ToString();
+                    try
+                    {
+                        var messageId = Guid.Parse(line);
+                        var message = new { messageId };
 
-                    if (info.KeyChar == '\r')
-                        Console.WriteLine();
+                        Console.WriteLine("sending [{0}]", messageId);
 
-                    var message = new DemoMessage(c);
-
-                    DemoHub.HubContext.Clients.All.handleMessage(message);
+                        DemoHub.HubContext.Clients.All.handle(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine(ex);
+                    }
                 }
             }
         }

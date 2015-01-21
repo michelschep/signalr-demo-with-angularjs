@@ -1,4 +1,5 @@
-﻿using DemoSignalR.Messages;
+﻿using DemoSignalR.MessageHandling;
+using DemoSignalR.Messages;
 using NUnit.Framework;
 
 namespace DemoSignalR.Test

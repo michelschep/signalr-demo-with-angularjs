@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DemoSignalR.MessageHandling;
 using Microsoft.AspNet.SignalR;
 
 namespace DemoSignalR

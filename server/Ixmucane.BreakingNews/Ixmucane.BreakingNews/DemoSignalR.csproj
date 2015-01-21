@@ -76,11 +76,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientMessage.cs" />
     <Compile Include="DemoHub.cs" />
     <Compile Include="DemoMessage.cs" />
     <Compile Include="ILog.cs" />
-    <Compile Include="MessageDeserializer.cs" />
+    <Compile Include="MessageHandling\MessageDeserializer.cs" />
     <Compile Include="MessageHandling\MessageRouter.cs" />
     <Compile Include="Messages\Query.cs" />
     <Compile Include="Program.cs" />

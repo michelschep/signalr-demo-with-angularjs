@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DemoSignalR.Messages;
 using Newtonsoft.Json;
 
-namespace DemoSignalR
+namespace DemoSignalR.MessageHandling
 {
     /// <summary>
     /// Main entry point for handling incoming Json messages.
