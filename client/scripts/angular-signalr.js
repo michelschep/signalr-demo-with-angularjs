@@ -44,7 +44,7 @@ angular.module('signalRApp', [])
     };
 
     this.handle = function(message) {
-        this.proxy.invoke('handle', message);
+        this.proxy.invoke('Handle', JSON.stringify(message));
     };
 
     this.stopConnection = function(message) {
