@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin.Hosting;
 
 namespace DemoSignalR
@@ -14,6 +15,8 @@ namespace DemoSignalR
             {
                 Console.WriteLine("SignalR push service started!");
 
+                var demoHubFactory = new Func<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<DemoHub>());
+
                 string line;
                 while ((line = Console.ReadLine()) != null)
                 {
@@ -24,7 +27,7 @@ namespace DemoSignalR
 
                         Console.WriteLine("sending [{0}]", messageId);
 
-                        GlobalHost.ConnectionManager.GetHubContext<DemoHub>().Clients.All.handle(message);
+                        demoHubFactory().Clients.All.handle(message);
                     }
                     catch (Exception ex)
                     {
