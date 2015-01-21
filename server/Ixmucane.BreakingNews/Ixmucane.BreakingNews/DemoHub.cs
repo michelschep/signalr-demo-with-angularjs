@@ -6,11 +6,25 @@ namespace DemoSignalR
 {
     public class DemoHub : Hub
     {
-        public void SendMessage(string message)
-        {
-            var clientMessage = new ClientMessage(Context.ConnectionId, message);
+        readonly Action<string> _handler;
 
-            Clients.Others.sendMessageFromClient(clientMessage);
+        public DemoHub()
+        {
+            var deserializer = new MessageDeserializer();
+            //new MessageRouter().Handle;
+            _handler = message =>
+            {
+                Console.WriteLine("Received message [{0}]", message);
+                var typedMessage = deserializer.Deserialize(message);
+                Console.WriteLine("Received type [{0}] message [{1}]", typedMessage.Item1, typedMessage.Item2);
+            };
+        }
+
+        public void Handle(string json)
+        {
+//            var clientMessage = new ClientMessage(Context.ConnectionId, jsonMessage);
+//            Clients.Others.sendMessageFromClient(clientMessage);
+            _handler(json);
         }
 
         public override Task OnConnected()

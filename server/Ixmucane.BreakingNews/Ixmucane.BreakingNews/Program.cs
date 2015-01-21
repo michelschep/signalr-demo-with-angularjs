@@ -23,7 +23,7 @@ namespace DemoSignalR
 
                     var message = new DemoMessage(c);
 
-                    DemoHub.HubContext.Clients.All.sendDemoHubMessage(message);
+                    DemoHub.HubContext.Clients.All.handleMessage(message);
                 }
             }
         }
