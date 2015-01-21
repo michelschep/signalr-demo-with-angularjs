@@ -11,7 +11,7 @@ namespace DemoSignalR.Support
             return As(typeof (T).Name);
         }
 
-        static ILog As(string name)
+        public static ILog As(string name)
         {
             return LogFactory(name);
         }

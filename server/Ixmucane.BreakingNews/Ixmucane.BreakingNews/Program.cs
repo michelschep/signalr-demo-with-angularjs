@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 
 namespace DemoSignalR
@@ -23,7 +24,7 @@ namespace DemoSignalR
 
                         Console.WriteLine("sending [{0}]", messageId);
 
-                        DemoHub.HubContext.Clients.All.handle(message);
+                        GlobalHost.ConnectionManager.GetHubContext<DemoHub>().Clients.All.handle(message);
                     }
                     catch (Exception ex)
                     {
