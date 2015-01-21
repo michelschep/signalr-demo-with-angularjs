@@ -57,6 +57,9 @@ angular.module('signalRApp', [])
     };
 })
 .controller('MessagesController', function($scope, $sce, demoHubService) {
+     $scope.items = [{'id':'1', 'title':'title1'}, {'id':'2', 'title':'title2'}];
+
+
      var body = "";
      $scope.status = "no connection";
      $scope.messageFromOtherClient = "Still no message from other client :-(";
@@ -92,4 +95,6 @@ angular.module('signalRApp', [])
      $scope.sendMessage = function(message) {
         demoHubService.sendMessage(message);  
      };
+
+
 }); 

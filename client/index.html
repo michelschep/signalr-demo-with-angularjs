@@ -14,20 +14,25 @@
 		<hr/>
 
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#sectionA" data-toggle="tab">Home</a></li>
-			<li><a href="#sectionB" data-toggle="tab">List</a></li>
-			<li><a href="#sectionC" data-toggle="tab">Query</a></li>
+			<li class="active"><a href="#listTab" data-toggle="tab">List</a></li>
+			<li><a href="#queryTab" data-toggle="tab">Query</a></li>
+			<li><a href="#connectionTab" data-toggle="tab">Connection</a></li>
+			<li><a href="#statusTab" data-toggle="tab">Status</a></li>
 		</ul>
 
 		<div class="tab-content">
-			<div id="sectionA" class="tab-pane fade in active">
+			<div id="connectionTab" class="tab-pane">
+				<h3>Connection</h3>
+
 				<button ng-click="makeConnection()">Make Connection</button>
 				<button ng-click="stopConnection()">Stop Connection</button>
 
 				<p>Status Connection: <b>{{status}}</b></p>
 				<p>Connection id: <b>{{connectionId}}</b></p>
+
+				<a href="http://localhost:8088/signalr/hubs">js meta data for hubs</a>
 				
-				<hr/>
+			<!-- 	<hr/>
 				
 				<h1>Message from server</h1>
 				<p ng-bind-html="message" compile-template></p>
@@ -38,26 +43,35 @@
 				
 				<h1>Message from other client</h1>
 				<p>Client: <b>{{messageFromOtherClient.Name}}</b>
-				<p>Message: <b>{{messageFromOtherClient.Message}}</b>
+				<p>Message: <b>{{messageFromOtherClient.Message}}</b> -->
 			</div>
-			<div id="sectionB" class="tab-pane fade">
-				<h3>Section B</h3>
-				LIST
+			<div id="listTab" class="tab-pane fade in active">
+				<h3>List of items</h3>
+				  <table>
+					    <tr>
+					      <th><a href="" ng-click="predicate = 'name'; reverse=false">Id</a>
+					          (<a href="" ng-click="predicate = '-name'; reverse=false">^</a>)</th>
+					      <th><a href="" ng-click="predicate = 'phone'; reverse=!reverse">Title</a></th>
+					    </tr>
+					    <tr ng-repeat="item in items | orderBy:predicate:reverse">
+					      <td>{{item.id}}</td>
+					      <td>{{item.title}}</td>
+					    </tr>
+  					</table>
 			</div>
-			<div id="sectionC" class="tab-pane fade">
-				<h3>Section C</h3>
-				QUERY
+			<div id="queryTab" class="tab-pane fade">
+				<h3>Execute query</h3>
+				<input>
+			</div>
+			<div id="statusTab" class="tab-pane fade">
+				<h3>Status Info</h3>
+				<div>some status info (background requests)</div>
+				<pre>{{items|json}}</pre>
 			</div>
 		</div>
-
-		<div>some status info (background requests)</div>
-
-		<a href="http://localhost:8088/signalr/hubs">js meta data for hubs</a>
 	</div>
-	<script src="bower_components/angular/angular.js"></script>
-	
 
-	
+	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/signalr/jquery.signalR.js"></script>
 	<script src="scripts/angular-signalr.js"></script>
 	<script src="http://localhost:8088/signalr/hubs"></script>
