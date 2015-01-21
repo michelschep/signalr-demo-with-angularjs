@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Threading;
+using DemoSignalR.Support;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin.Hosting;
 
 namespace DemoSignalR
@@ -9,23 +10,37 @@ namespace DemoSignalR
     {
         static void Main()
         {
-            Console.WriteLine("Starting SignalR push service...");
+            var log = Logs.As<Program>();
+
+            log.Info("Starting SignalR push service...");
+
+            // booh! used by hub; rather find a way to have signalr inject this instance into hubs it creates
+            var messageHandling = new MessageHandlingProcess(envelope => Logs.As("Handling").Info(envelope));
+            messageHandling.Start();
+
+            MessageHandlingProcess.Instance = messageHandling;
 
             using (WebApp.Start<SignalRStartup>("http://*:8088/"))
             {
-                Console.WriteLine("SignalR push service started!");
+                log.Info("SignalR push service started!");
 
                 var demoHubFactory = new Func<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<DemoHub>());
 
                 string line;
                 while ((line = Console.ReadLine()) != null)
                 {
+                    if (string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
+                    {
+                        log.Info("exiting...");
+                        break;
+                    }
+
                     try
                     {
                         var messageId = Guid.Parse(line);
                         var message = new { messageId };
 
-                        Console.WriteLine("sending [{0}]", messageId);
+                        log.Info("sending [{0}]", messageId);
 
                         demoHubFactory().Clients.All.handle(message);
                     }
@@ -35,6 +50,9 @@ namespace DemoSignalR
                     }
                 }
             }
+
+            messageHandling.Stop();
+            Thread.Sleep(250);
         }
     }
 }

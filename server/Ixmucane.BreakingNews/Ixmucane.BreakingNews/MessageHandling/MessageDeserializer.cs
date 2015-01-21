@@ -23,23 +23,20 @@ namespace DemoSignalR.MessageHandling
             };
         }
 
-        public Tuple<Type, object> Deserialize(string json)
+        public Message Deserialize(string json)
         {
-            var message = (dynamic)JsonConvert.DeserializeObject(json, new JsonSerializerSettings
-            {
-                
-            });
+            var message = (dynamic)JsonConvert.DeserializeObject(json);
 
             var messageId = Convert.ChangeType(message.messageId, typeof(Guid));
-            _log.Info("MessageId [{0}]", messageId);
-
             var messageTypeAlias = (string) message.messageType;
-            _log.Info("MessageTypeAlias [{0}]", messageTypeAlias);
-
             var messageType = MessageTypeFor(messageTypeAlias);
+//            var payload = JsonConvert.DeserializeObject(message.Payload, messageType);
+
+            _log.Info("MessageId [{0}]", messageId);
+            _log.Info("MessageTypeAlias [{0}]", messageTypeAlias);
             _log.Info("MessageType [{0}]", messageType);
 
-            return Tuple.Create(messageType, Activator.CreateInstance(messageType));
+            return new Message(messageId, Activator.CreateInstance(messageType), messageType);
         }
 
         Type MessageTypeFor(string messageTypeAlias)

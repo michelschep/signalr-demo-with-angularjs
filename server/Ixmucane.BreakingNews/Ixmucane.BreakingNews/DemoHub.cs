@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DemoSignalR.MessageHandling;
-using DemoSignalR.Messages;
 using DemoSignalR.Support;
 using Microsoft.AspNet.SignalR;
 
@@ -15,26 +12,16 @@ namespace DemoSignalR
         
         public void Handle(string json)
         {
-            Handle(_deserializer.Deserialize(json));
+            var message = _deserializer.Deserialize(json);
+            Handle(message);
         }
 
-        void Handle(Tuple<Type, object> typedMessage)
+        void Handle(Message message)
         {
-            var handlers = new Dictionary<Type, Action<object>>
-            {
-                {typeof(Query), HandleAs<Query>(Logs.As("Handling").Info)}
-            };
+            var messageWithContext = new Envelope<Message>(message)
+                .WithMeta("connectionId", Context.ConnectionId);
 
-            Action<object> handler;
-            if (!handlers.TryGetValue(typedMessage.Item1, out handler))
-                throw new NotSupportedException(string.Format("No handler for message of type [{0}]", typedMessage.Item1));
-
-            handler(typedMessage.Item2);
-        }
-
-        Action<object> HandleAs<T>(Action<T> handler)
-        {
-            return message => handler((T) message);
+            MessageHandlingProcess.Instance.Handle(messageWithContext);
         }
 
         public override Task OnConnected()
