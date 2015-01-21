@@ -58,7 +58,7 @@ angular.module('signalRApp', [])
 })
 .controller('MessagesController', function($scope, $sce, demoHubService) {
      $scope.items = [{'id':'1', 'title':'title1'}, {'id':'2', 'title':'title2'}];
-
+     $scope.requests = [];
 
      var body = "";
      $scope.status = "no connection";
@@ -96,5 +96,24 @@ angular.module('signalRApp', [])
         demoHubService.sendMessage(message);  
      };
 
+     $scope.submit = function(query) {
+        console.log("submit query to server: " + $scope.query);
 
+        var request = createRequestFor(query);
+
+        demoHubService.handle(request);
+     };
+
+     function createRequestFor(query) {
+        var serverRequest = {messageId:guid(), query:query, messageType:'query'};
+        var internalRequest = {serverRequest:serverRequest, status:'pending'};
+
+        $scope.requests.push(internalRequest);
+     }
+
+     function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+          }
+
+     function guid()  { return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4(); };
 }); 

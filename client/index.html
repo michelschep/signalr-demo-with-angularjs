@@ -61,7 +61,23 @@
 			</div>
 			<div id="queryTab" class="tab-pane fade">
 				<h3>Execute query</h3>
-				<input>
+				<form ng-submit="submit(query)">
+					<input name="query" ng-model="query">
+					<input type="submit" id="submit" value="Submit" />
+				</form>
+
+				<table>
+					    <tr>
+					      <th>Id</th>
+					      <th>Query</th>
+					      <th>Status</th>
+					    </tr>
+					    <tr ng-repeat="request in requests">
+					      <td>{{request.serverRequest.messageId}}</td>
+					      <td>{{request.serverRequest.query}}</td>
+					      <td>{{request.status}}</td>
+					    </tr>
+  					</table>
 			</div>
 			<div id="statusTab" class="tab-pane fade">
 				<h3>Status Info</h3>
