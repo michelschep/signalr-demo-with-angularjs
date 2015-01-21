@@ -69,6 +69,12 @@ angular.module('signalRApp', [])
         console.log('query response received: ', message);
 
         $scope.responses.push(message);
+
+        angular.forEach($scope.requests, function(request , key) {
+
+            if (request.serverRequest.messageId === message.messageId)
+                request.status = "processed";
+        })
     });
 
      $scope.$on("SignalREvent", function (event, message) {
@@ -105,8 +111,8 @@ angular.module('signalRApp', [])
             demoHubService.handle(request.serverRequest);
 
              // fake reponse server
-            // var responseMessage =  {messageId:request.serverRequest.messageId};
-            // $rootScope.$broadcast("QueryProcessedEvent", responseMessage);
+            //var responseMessage =  {messageId:request.serverRequest.messageId};
+            //$rootScope.$broadcast("QueryProcessedEvent", responseMessage);
         }
         catch (ex) {
             request.status = 'failed: ' + ex.message;
