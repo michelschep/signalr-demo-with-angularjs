@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace DemoSignalR.Support
 {
@@ -24,7 +25,7 @@ namespace DemoSignalR.Support
         void Log(string format, params object[] args)
         {
             var msg = (args == null || args.Length == 0) ? format : string.Format(format, args);
-            Console.WriteLine("{0} [{1}] {2}", DateTime.Now, _name, msg);
+            Console.WriteLine("({0}) {1} [{2}] {3}", Thread.CurrentThread.ManagedThreadId, DateTime.Now, _name, msg);
         }
     }
 }

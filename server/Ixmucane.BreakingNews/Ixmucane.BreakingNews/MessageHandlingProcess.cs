@@ -25,6 +25,9 @@ namespace DemoSignalR
         public void Start()
         {
             Task.Factory.StartNew(ProcessMessages);
+            Task.Factory.StartNew(ProcessMessages);
+            Task.Factory.StartNew(ProcessMessages);
+            Task.Factory.StartNew(ProcessMessages);
         }
 
         public void Stop()
