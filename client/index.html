@@ -45,7 +45,7 @@
 				<p>Client: <b>{{messageFromOtherClient.Name}}</b>
 				<p>Message: <b>{{messageFromOtherClient.Message}}</b> -->
 			</div>
-			<div id="listTab" class="tab-pane fade in active">
+			<div id="listTab" class="tab-pane fade">
 				<h3>List of items</h3>
 				  <table>
 					    <tr>
@@ -59,14 +59,14 @@
 					    </tr>
   					</table>
 			</div>
-			<div id="queryTab" class="tab-pane fade">
+			<div id="queryTab" class="tab-pane fade in active">
 				<h3>Execute query</h3>
 				<form ng-submit="submit(query)">
 					<input name="query" ng-model="query">
 					<input type="submit" id="submit" value="Submit" />
 				</form>
 
-				<table>
+				<table class="table">
 					    <tr>
 					      <th>Id</th>
 					      <th>Query</th>
@@ -76,6 +76,15 @@
 					      <td>{{request.serverRequest.messageId}}</td>
 					      <td>{{request.serverRequest.query}}</td>
 					      <td>{{request.status}}</td>
+					    </tr>
+  					</table>
+
+  					<table class="table">
+					    <tr>
+					      <th>Id</th>
+					    </tr>
+					    <tr ng-repeat="response in responses">
+					      <td>{{response.messageId}}</td>
 					    </tr>
   					</table>
 			</div>

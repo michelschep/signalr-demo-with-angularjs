@@ -11,8 +11,8 @@ angular.module('signalRApp', [])
         this.proxy = connection.createHubProxy('demoHub');
         
         // messages from the signalR hub
-        this.proxy.on('sendDemoHubMessage', function (message) {
-            $rootScope.$broadcast("MessageEvent", message);
+        this.proxy.on('handle', function (message) {
+            $rootScope.$broadcast("QueryProcessedEvent", message);
         });
 
         this.proxy.on('sendMessageFromClient', function (message) {
@@ -56,19 +56,19 @@ angular.module('signalRApp', [])
         return this.proxy.connection.id;
     };
 })
-.controller('MessagesController', function($scope, $sce, demoHubService) {
+.controller('MessagesController', function($scope, $rootScope, $sce, demoHubService) {
      $scope.items = [{'id':'1', 'title':'title1'}, {'id':'2', 'title':'title2'}];
      $scope.requests = [];
+     $scope.responses = [];
 
      var body = "";
      $scope.status = "no connection";
      $scope.messageFromOtherClient = "Still no message from other client :-(";
 
-     $scope.$on("MessageEvent", function (event, message) {
-        body = body + message.Body;
-        $scope.message = $sce.trustAsHtml(body);
+     $scope.$on("QueryProcessedEvent", function (event, message) {
+        console.log('query response received: ', message);
 
-        $scope.$apply();
+        $scope.responses.push(message);
     });
 
      $scope.$on("SignalREvent", function (event, message) {
@@ -101,7 +101,16 @@ angular.module('signalRApp', [])
 
         var request = createRequestFor(query);
 
-        demoHubService.handle(request);
+        try {
+            demoHubService.handle(request.serverRequest);
+
+             // fake reponse server
+            // var responseMessage =  {messageId:request.serverRequest.messageId};
+            // $rootScope.$broadcast("QueryProcessedEvent", responseMessage);
+        }
+        catch (ex) {
+            request.status = 'failed: ' + ex.message;
+        }
      };
 
      function createRequestFor(query) {
@@ -109,6 +118,8 @@ angular.module('signalRApp', [])
         var internalRequest = {serverRequest:serverRequest, status:'pending'};
 
         $scope.requests.push(internalRequest);
+
+        return internalRequest;
      }
 
      function s4() {
