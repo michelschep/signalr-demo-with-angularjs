@@ -66,14 +66,14 @@ angular.module('signalRApp', [])
      $scope.messageFromOtherClient = "Still no message from other client :-(";
 
      $scope.$on("QueryProcessedEvent", function (event, message) {
-        console.log('query response received: ', message);
-
         $scope.responses.push(message);
 
         angular.forEach($scope.requests, function(request , key) {
             if (request.serverRequest.messageId === message.messageId)
                 request.status = "processed";
-        })
+        });
+
+        $scope.$apply();
     });
 
      $scope.$on("SignalREvent", function (event, message) {
