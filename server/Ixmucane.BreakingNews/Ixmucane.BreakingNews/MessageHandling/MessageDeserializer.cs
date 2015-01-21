@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DemoSignalR.Messages;
+using DemoSignalR.Support;
 using Newtonsoft.Json;
 
 namespace DemoSignalR.MessageHandling

@@ -77,14 +77,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoHub.cs" />
-    <Compile Include="DemoMessage.cs" />
-    <Compile Include="ILog.cs" />
     <Compile Include="MessageHandling\MessageDeserializer.cs" />
     <Compile Include="MessageHandling\MessageRouter.cs" />
     <Compile Include="Messages\Query.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalRStartup.cs" />
+    <Compile Include="Support\ConsoleLog.cs" />
+    <Compile Include="Support\ILog.cs" />
+    <Compile Include="Support\Logs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

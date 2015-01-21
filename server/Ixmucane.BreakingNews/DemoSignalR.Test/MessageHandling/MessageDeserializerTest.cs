@@ -2,7 +2,7 @@
 using DemoSignalR.Messages;
 using NUnit.Framework;
 
-namespace DemoSignalR.Test
+namespace DemoSignalR.Test.MessageHandling
 {
     public class MessageDeserializerTest
     {
